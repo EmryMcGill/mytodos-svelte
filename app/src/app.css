@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;800&family=VT323&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+
+:root {
+    font-family: 'Manrope';
+    --lightgrey: #778899;
+    --lightgreyalt: rgb(154, 154, 154);
+    --darkgrey: rgb(48, 48, 48);
+    --blue: #BFD6FE;
+    --green: #5FF19B;
+    --yellow: #FDE389;
+    --red: #FED9D3;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+
+}
+
+button {
+    display: flex;
+    align-items: center;
+    margin: 0.5rem;
+    border-radius: 0.2rem;
+    padding: 0.3rem;
+    text-wrap: nowrap;
+    font-family: 'Manrope';
+    font-size: 1rem;
+    border: none;
+    background-color: #e9d7ff;
+}
+
+button:hover {
+    background-color: #e3cbff;
+    cursor: pointer;
+}
+
+h1,
+h2,
+h3 {
+    margin: 0.5rem;
+    text-wrap: nowrap;
+}
