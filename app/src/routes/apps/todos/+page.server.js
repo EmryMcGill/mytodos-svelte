@@ -9,18 +9,17 @@ export async function load({ locals }) {
         throw redirect(303, '/login')
     }
 
-    // get the users todos and catagories from the database
+    // get the users todos from the database
     const todos = await pb.collection('tasks').getFullList(
-        { filter: `user = "${locals.user.id}" && catagorie = "${locals.user.current_catagorie}"` }
+        {
+            filter: `user = "${locals.user.id}" && catagorie = "${locals.user.current_catagorie}"`,
+            sort: 'dueDate'
+        }
     )
 
     // return the data
     return { todos: todos };
 };
-
-const sleep = async (ms) => {
-    return new Promise(resolve => setTimeout(resolve, ms))
-}
 
 /** @type {import('./$types').Actions} */
 export const actions = {
@@ -49,17 +48,22 @@ export const actions = {
         const data = await request.formData();
         const id = data.get('id');
 
+        // delete todo from db
         await pb.collection('tasks').delete(id);
 
         return { success: true }
     },
 
     updateTodo: async ({ request }) => {
+        // get the date from the form
         const data = await request.formData();
         const id = data.get('id');
-        const todo = data.get('title');
+        const title = data.get('title');
 
-        await pb.collection('tasks').update(id, { title: todo });
+        console.log(title)
+
+        // update the task title in the database
+        await pb.collection('tasks').update(id, { title: title });
 
         return { success: true }
     },
@@ -70,9 +74,11 @@ export const actions = {
         const id = data.get('id');
         const date = data.get('date');
 
-        console.log(await locals.pb.collection('tasks').update(id, { date: date }))
+        // create a nice formate for the date
+        const dateString = new Date(date).toLocaleDateString();
 
-        // update the date for the task
+        // update the due date in the database
+        await locals.pb.collection('tasks').update(id, { dueDate: new Date(date), dateString })
 
         return { success: true }
     }

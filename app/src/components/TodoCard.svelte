@@ -9,14 +9,17 @@
 
     let toggleTitle = false;
     let completeHover = false;
-    let newTitle = todo.title;
+    let title = todo.title;
+    const titleFormId = "title-form" + todo.id;
     const datePickerId = "date-picker" + todo.id;
-    let dueDate = todo.date;
+    const dateFormId = "date-form" + todo.id;
+    let dueDate = todo.dueDate;
 
     const handleToggleTitle = () => (toggleTitle = !toggleTitle);
 
     const handleSubmit = () => {
-        document.getElementById("title-form").submit();
+        document.getElementById(titleFormId).requestSubmit();
+        handleToggleTitle();
     };
 
     onMount(() => {
@@ -26,8 +29,9 @@
             onChange: (selectedDates, dateStr, instance) => {
                 instance.close();
                 // submit form to call a form action
-                dueDate = dateStr;
-                document.getElementById("due-date-form").requestSubmit();
+                dueDate = selectedDates[0];
+
+                document.getElementById(dateFormId).requestSubmit();
             },
         });
     });
@@ -58,19 +62,19 @@
             </button>
         {:else}
             <form
-                id="title-form"
+                id={titleFormId}
                 method="POST"
                 action="?/updateTodo"
-                use:enhance={(formData) => {
-                    // give the new date form data
-                    formData.append("title", newTitle);
+                use:enhance={({ formData }) => {
+                    console.log("title", title);
+                    formData.append("title", title);
                 }}
             >
                 <input type="hidden" name="id" value={todo.id} />
                 <input
                     class="title-input"
                     type="text"
-                    bind:value={newTitle}
+                    bind:value={title}
                     autofocus
                     on:focusout={handleSubmit}
                 />
@@ -81,7 +85,7 @@
         <form
             action="?/updateDueDate"
             method="POST"
-            id="due-date-form"
+            id={dateFormId}
             use:enhance={({ formData }) => {
                 console.log("date", dueDate);
                 formData.append("date", dueDate);
@@ -89,7 +93,7 @@
         >
             <input type="hidden" name="id" value={todo.id} />
             <div class="flatpickr" id={datePickerId}>
-                <p>{dueDate}</p>
+                <p disabled>{todo.dateString}</p>
                 <input disabled class="cal-input" type="text" data-input />
                 <button class="cal-btn" type="button" data-toggle
                     ><Icon icon="carbon:calendar" /></button
