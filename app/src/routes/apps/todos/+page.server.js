@@ -26,6 +26,9 @@ export const actions = {
     createTodo: async ({ locals, request }) => {
         const data = await request.formData();
         const todo = data.get('todo');
+        const date = data.get('date');
+        const dateString = data.get('dateStr')
+
 
         // validate todo
         if (!todo) {
@@ -37,7 +40,10 @@ export const actions = {
             {
                 title: todo,
                 user: locals.user.id,
-                catagorie: locals.user.current_catagorie
+                catagorie: locals.user.current_catagorie,
+                dueDate: new Date(date),
+                dateString: dateString
+
             }
         );
 
@@ -75,7 +81,11 @@ export const actions = {
         const date = data.get('date');
 
         // create a nice formate for the date
-        const dateString = new Date(date).toLocaleDateString();
+        const dateString = new Date(date).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "numeric"
+        });
 
         // update the due date in the database
         await locals.pb.collection('tasks').update(id, { dueDate: new Date(date), dateString })

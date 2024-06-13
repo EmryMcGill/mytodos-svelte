@@ -93,7 +93,7 @@
         >
             <input type="hidden" name="id" value={todo.id} />
             <div class="flatpickr" id={datePickerId}>
-                <p disabled>{todo.dateString}</p>
+                <p class="date-text" disabled>{todo.dateString}</p>
                 <input disabled class="cal-input" type="text" data-input />
                 <button class="cal-btn" type="button" data-toggle
                     ><Icon icon="carbon:calendar" /></button
@@ -160,6 +160,11 @@
 
     .todo-title-btn:hover {
         cursor: text;
+    }
+
+    .date-text {
+        color: var(--lightgrey);
+        font-size: 0.8rem;
     }
 
     .delete-btn {
