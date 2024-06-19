@@ -1,36 +1,45 @@
 <script>
+    // imports
     import { enhance } from "$app/forms";
     import Icon from "@iconify/svelte";
     import Flatpickr from "svelte-flatpickr";
     import "flatpickr/dist/flatpickr.css";
     import { onMount } from "svelte";
 
+    // parameters
     export let todo;
 
+    // variables
     let toggleTitle = false;
     let completeHover = false;
     let title = todo.title;
+    let dueDate = todo.dueDate;
+
+    // dynamic ids to identify instances of cards
     const titleFormId = "title-form" + todo.id;
     const datePickerId = "date-picker" + todo.id;
     const dateFormId = "date-form" + todo.id;
-    let dueDate = todo.dueDate;
 
+    // functions
+
+    // toggle the title edit form
     const handleToggleTitle = () => (toggleTitle = !toggleTitle);
 
+    // handle submit of title change
     const handleSubmit = () => {
         document.getElementById(titleFormId).requestSubmit();
         handleToggleTitle();
     };
 
+    // called on every reload
     onMount(() => {
+        // setup the date picker
         document.getElementById(datePickerId).flatpickr({
             enableTime: true,
             dateFormat: "M d, Y",
             onChange: (selectedDates, dateStr, instance) => {
                 instance.close();
-                // submit form to call a form action
                 dueDate = selectedDates[0];
-
                 document.getElementById(dateFormId).requestSubmit();
             },
         });
@@ -58,7 +67,7 @@
         </form>
         {#if !toggleTitle}
             <button class="todo-title-btn" on:click={handleToggleTitle}>
-                <span>{todo.title}</span>
+                <p>{todo.title}</p>
             </button>
         {:else}
             <form
@@ -68,9 +77,9 @@
                 use:enhance={({ formData }) => {
                     console.log("title", title);
                     formData.append("title", title);
+                    formData.append("id", todo.id);
                 }}
             >
-                <input type="hidden" name="id" value={todo.id} />
                 <input
                     class="title-input"
                     type="text"
@@ -89,11 +98,11 @@
             use:enhance={({ formData }) => {
                 console.log("date", dueDate);
                 formData.append("date", dueDate);
+                formData.append("id", todo.id);
             }}
         >
-            <input type="hidden" name="id" value={todo.id} />
             <div class="flatpickr" id={datePickerId}>
-                <p class="date-text" disabled>{todo.dateString}</p>
+                <p class="sub-text" disabled>{todo.dateString}</p>
                 <input disabled class="cal-input" type="text" data-input />
                 <button class="cal-btn" type="button" data-toggle
                     ><Icon icon="carbon:calendar" /></button
@@ -160,11 +169,6 @@
 
     .todo-title-btn:hover {
         cursor: text;
-    }
-
-    .date-text {
-        color: var(--lightgrey);
-        font-size: 0.8rem;
     }
 
     .delete-btn {

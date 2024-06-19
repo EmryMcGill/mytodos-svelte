@@ -1,5 +1,5 @@
 <script>
-    // import stuff
+    // imports
     import { enhance } from "$app/forms";
     import Icon from "@iconify/svelte";
     import TodoCard from "../../../components/TodoCard.svelte";
@@ -15,6 +15,7 @@
     /** @type {import('./$types').ActionData} */
     export let form;
 
+    // variables
     let loading = false;
     let dueDateStr = "";
     let dueDate;
@@ -29,6 +30,8 @@
         // give the date to the form data
         formData.append("date", dueDate);
         formData.append("dateStr", dueDateStr);
+
+        // reset the date variables
         dueDate = null;
         dueDateStr = "";
 
@@ -40,12 +43,14 @@
     };
 
     onMount(() => {
+        // setup the date picker
         document.getElementById("date-picker").flatpickr({
             enableTime: true,
             dateFormat: "M d, Y",
             onChange: (selectedDates, dateStr, instance) => {
                 dueDate = selectedDates[0];
                 instance.close();
+                document.getElementById("cal-btn-main").focus();
                 dueDateStr = new Date(dateStr).toLocaleDateString("en-US", {
                     year: "numeric",
                     month: "short",
@@ -65,8 +70,7 @@
     id="todo-form"
     use:enhance={beforeSubmit}
 >
-    <button type="submit">+ Add Task</button>
-    <input type="text" name="todo" placeholder="Todo Name" autofocus />
+    <input autofocus type="text" name="todo" placeholder="Todo Name" />
 
     <div class="flatpickr" id="date-picker">
         {#if dueDateStr}
@@ -79,10 +83,14 @@
             bind:value={dueDateStr}
             data-input
         />
-        <button class="cal-btn" type="button" data-toggle
-            ><Icon icon="carbon:calendar" /></button
+        <button
+            id="cal-btn-main"
+            class="cal-btn action-btn"
+            type="button"
+            data-toggle><Icon icon="carbon:calendar" /></button
         >
     </div>
+    <button class="action-btn" type="submit">+ Add Task</button>
 </form>
 
 {#each data.todos as todo}
@@ -104,27 +112,12 @@
         background-color: var(--lightgreyalt);
     }
 
-    button {
-        display: flex;
-        align-items: center;
-        border: 2px solid black;
-        background-color: white;
-        transition: 0.1s;
-        font-weight: 700;
-        margin-left: 0;
-    }
-    button:hover {
-        cursor: pointer;
-        background-color: black;
-        color: white;
-        transition: 0.1s;
-    }
-
     input[type="text"] {
         width: 100%;
         font-family: "Poppins";
         font-size: 1em;
         padding: 0.3rem;
+        margin: 0.25rem;
     }
 
     .flatpickr {
@@ -137,7 +130,6 @@
 
     .cal-btn {
         padding: 0.5rem;
-        margin-left: 0.5rem;
     }
 
     .date-text {

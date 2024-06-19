@@ -7,16 +7,22 @@
     --lightgrey: #778899;
     --lightgreyalt: rgb(154, 154, 154);
     --darkgrey: rgb(48, 48, 48);
-    --blue: #BFD6FE;
-    --green: #5FF19B;
-    --yellow: #FDE389;
-    --red: #FED9D3;
+    --blue: #3B82F6;
+    --green: #4ADE80;
+    --yellow: #FACC15;
+    --red: #EF4444;
+    --purple: #6366F1;
+    --pink: #D946EF;
+
 }
 
 * {
     box-sizing: border-box;
-    margin: 0;
+    margin: 0rem;
+}
 
+a {
+    text-decoration: none;
 }
 
 button {
@@ -37,9 +43,44 @@ button:hover {
     cursor: pointer;
 }
 
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    margin: 0.25rem;
+    padding: 0.3rem;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 0.2rem;
+    font-family: 'Manrope';
+    font-size: 1rem;
+    font-weight: 700;
+    text-wrap: nowrap;
+    transition: 0.1s;
+}
+
+.action-btn:hover {
+    cursor: pointer;
+    background-color: black;
+    color: white;
+    transition: 0.1s;
+}
+
+.action-btn:focus {
+    cursor: pointer;
+    background-color: black;
+    color: white;
+    transition: 0.1s;
+}
+
 h1,
 h2,
 h3 {
     margin: 0.5rem;
     text-wrap: nowrap;
+}
+
+.sub-text {
+    color: var(--lightgrey);
+    font-size: 0.8rem;
 }

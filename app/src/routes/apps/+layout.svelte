@@ -1,17 +1,20 @@
 <script>
+    // imports
     import { enhance } from "$app/forms";
     import Icon from "@iconify/svelte";
     import ColorPicker from "../../components/ColorPicker.svelte";
 
-    // get the page data
+    // get the page data from load function
     /** @type {import('./$types').PageData} */
     export let data;
 
     // TODO: switch to true for production
+    // variables
     let sideMenuToggle = false;
     let addCatToggle = false;
-    let loading = false;
     let catCol;
+
+    // functions
 
     // function to toggle the side menu
     const handleToggle = () => {
@@ -21,21 +24,6 @@
     // function to toggle add catagorie
     const handleCatToggle = () => {
         addCatToggle = !addCatToggle;
-    };
-
-    // function for loading and to toggle add catagorie
-    const beforeSubmit = () => {
-        // toggle the add catagorie button
-        handleCatToggle();
-
-        // turn loading on while waiting for form to submit
-        loading = true;
-
-        // turn loading off after form submits
-        return async ({ update }) => {
-            loading = false;
-            await update();
-        };
     };
 </script>
 
@@ -66,7 +54,10 @@
                             class="cat-input-form"
                             action="/apps?/createCatagorie"
                             method="POST"
-                            use:enhance={beforeSubmit}
+                            use:enhance={() => {
+                                // close the color picker
+                                handleCatToggle();
+                            }}
                         >
                             <ColorPicker bind:color={catCol} />
                             <input
@@ -133,9 +124,6 @@
 </div>
 
 <style>
-    a {
-        text-decoration: none;
-    }
     .content {
         display: flex;
         flex-direction: row;
@@ -184,6 +172,7 @@
         color: var(--lightgreyalt);
         transform: rotate(-90deg);
         transition: 0.5s;
+        margin: 1rem;
     }
 
     .check:checked + .side-menu-container .check-label {
@@ -272,12 +261,8 @@
     }
 
     .catagorie-icon {
-        color: #e9d7ff;
         display: flex;
         align-items: center;
         margin-right: 0.5rem;
-    }
-
-    .logout-btn {
     }
 </style>

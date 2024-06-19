@@ -1,17 +1,32 @@
 <script>
+    // imports
     import Icon from "@iconify/svelte";
 
-    let toggle = false;
+    // params
     export let color = "#778899";
 
+    // variables
+    let toggle = false;
+    const colors = [
+        "#3B82F6",
+        "#4ADE80",
+        "#FACC15",
+        "#EF4444",
+        "#6366F1",
+        "#D946EF",
+    ];
+
+    // functions
+
+    // handle toggling the color picker
     const handleToggle = () => {
         toggle = !toggle;
         console.log("toogle");
     };
 
+    // change the selected color
     const selectColor = (col) => {
         color = col;
-        console.log("change col");
         handleToggle();
     };
 </script>
@@ -37,24 +52,11 @@
         </button>
     </div>
     <div class="picker-container">
-        <button on:click={() => selectColor("#5FF19B")}
-            ><Icon
-                color="var(--green)"
-                icon="material-symbols:circle"
-            /></button
-        >
-        <button on:click={() => selectColor("#FDE389")}
-            ><Icon
-                color="var(--yellow)"
-                icon="material-symbols:circle"
-            /></button
-        >
-        <button on:click={() => selectColor("#BFD6FE")}
-            ><Icon color="var(--blue)" icon="material-symbols:circle" /></button
-        >
-        <button on:click={() => selectColor("#FED9D3")}
-            ><Icon color="var(--red)" icon="material-symbols:circle" /></button
-        >
+        {#each colors as col}
+            <button on:click={() => selectColor(col)}
+                ><Icon color={col} icon="material-symbols:circle" /></button
+            >
+        {/each}
     </div>
 {/if}
 
