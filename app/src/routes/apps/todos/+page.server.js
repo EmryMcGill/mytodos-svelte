@@ -17,8 +17,21 @@ export async function load({ locals }) {
         }
     )
 
+    // get the catagories from database
+    const catagories = await pb.collection('task_catagories').getFullList(
+        { filter: `user = "${locals.user.id}"` }
+    )
+
+    let current_catagorie = locals.user.current_catagorie;
+
+    // check if user has a current catagorie
+    if (!current_catagorie) {
+        await locals.pb.collection('users').update(user.id, { current_catagorie: catagories[0].id })
+        current_catagorie = catagories[0].id
+    }
+
     // return the data
-    return { todos: todos };
+    return { todos: todos, catagories, current_catagorie };
 };
 
 /** @type {import('./$types').Actions} */
